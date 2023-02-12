@@ -1,6 +1,6 @@
-use std::io;
 use clap::Parser;
 use linya::Progress;
+use std::io;
 
 // enum Phase {
 //     Work,
@@ -24,22 +24,30 @@ fn main() {
         t = "task"
     }
 
+
+
+    let mut ks = String::new();
     println!("Do you want to start [{t}] with Tomatui? [Y/n]");
 
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
+    while ks != "Y" && ks != "y" {
+        ks.clear();
+        io::stdin().read_line(&mut ks).unwrap();
+        ks = ks.trim().to_owned();
 
-    println!("{input}");
+        if ks == "" {
+            break;
+        }
 
+        println!("{ks:?}");
+    }
 
-
-
+    run(t.to_owned())
 }
 
 fn run(t: String) {
-        let mut progress = Progress::new();
-        let bar = progress.bar(50, t);
+    let mut progress = Progress::new();
+    println!("{t}");
+    let bar = progress.bar(50, "Work!");
 
-        progress.set_and_draw(&bar, 10);
-    
+    progress.set_and_draw(&bar, 50);
 }
