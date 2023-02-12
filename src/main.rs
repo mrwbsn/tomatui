@@ -24,8 +24,6 @@ fn main() {
         t = "task"
     }
 
-
-
     let mut ks = String::new();
     println!("Do you want to start [{t}] with Tomatui? [Y/n]");
 
