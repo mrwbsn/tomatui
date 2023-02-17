@@ -11,53 +11,49 @@ struct Cli {
 
 #[derive(Debug)]
 enum Phase {
-    Work(i32),
+    Work,
     ShortBreak,
     LongBreak,
 }
 
 impl Phase {
     fn new() -> Self {
-        Phase::Work(0)
+        Phase::Work
     }
 
-    fn check(&mut self) {
+    fn check(&mut self, work_cycle: i32) {
         match self {
-            Phase::Work(..) => self.work(),
-            Phase::ShortBreak => self.short_break(),
+            Phase::Work => self.work(work_cycle),
+            Phase::ShortBreak => self.short_break(work_cycle),
             Phase::LongBreak => self.long_break(),
         }
     }
 
-    fn work(&mut self) {
+    fn work(&mut self, mut work_cycle: i32) {
         let duration = 15;
         self.run(duration);
-        *self = Phase::ShortBreak;
-        self.check()
+        if work_cycle < 5 {
+            *self = Phase::ShortBreak;
+        } else {
+            *self = Phase::LongBreak;
+        }
+        work_cycle += 1;
+        self.check(work_cycle)
     }
 
-    fn short_break(&mut self) {
-        let mut cycle = 0;
-        if let Phase::Work(n) = self {
-            cycle = *n + 1
-        }
-        println!("{cycle}");
+    fn short_break(&mut self, work_cycle: i32) {
         let duration = 5;
         self.run(duration);
-        *self = Phase::Work(cycle);
-        println!("{self:?}");
-        self.check()
+        *self = Phase::Work;
+        self.check(work_cycle)
     }
 
     fn long_break(&mut self) {
-        let mut cycle = 0;
-        if let Phase::Work(n) = self {
-            cycle = *n + 1
-        }
         let duration = 30;
         self.run(duration);
-        *self = Phase::Work(cycle);
-        self.check()
+        *self = Phase::Work;
+        // work_cycle reset to 0
+        self.check(0)
     }
 
     fn run(&self, duration: i32) {
@@ -74,7 +70,7 @@ fn main() {
     cli_confirmation(args);
 
     let mut tomatui = Phase::new();
-    tomatui.check();
+    tomatui.check(0);
 }
 
 fn cli_args() -> String {
