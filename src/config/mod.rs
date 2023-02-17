@@ -8,16 +8,16 @@ struct ConfigToml {
 
 #[derive(Deserialize)]
 struct ConfigTomlDuration {
-    work: Option<i32>,
-    short_break: Option<i32>,
-    long_break: Option<i32>,
+    work: Option<u64>,
+    short_break: Option<u64>,
+    long_break: Option<u64>,
 }
 
 #[derive(Clone, Copy)]
 pub struct Config {
-    pub work_duration: i32,
-    pub short_break_duration: i32,
-    pub long_break_duration: i32,
+    pub work_duration: u64,
+    pub short_break_duration: u64,
+    pub long_break_duration: u64,
 }
 
 impl Default for Config {
